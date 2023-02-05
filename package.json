@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon -r dotenv/config src/index.ts dotenv_config_path=./.env",
     "start": "node -r dotenv/config src/index.ts dotenv_config_path=./.env",
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc --project tsconfig.json --listFiles --pretty",
     "start-on": "npx ts-node build/index.js"
   },
   "keywords": [],
