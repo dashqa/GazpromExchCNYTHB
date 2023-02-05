@@ -1,0 +1,16 @@
+{
+  "extends": "airbnb-typescript/base",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "no-await-in-loop": "off",
+    "no-console": "off",
+    "no-restricted-syntax": ["off", "ForOfStatement", "ForInStatement"],
+    "guard-for-in": "off",
+    "max-len": ["error", {"code":  300}],
+    "import/prefer-default-export": "off",
+    "no-continue": "off",
+    "@typescript-eslint/no-loop-func": "off"
+  }
+}

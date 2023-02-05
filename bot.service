@@ -1,0 +1,14 @@
+[Unit]
+Description=GazpromBExchangeCNYTHB - Telegram bot
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/node /build/index.js
+ExecReload=/usr/bin/node /build/index.js
+WorkingDirectory=/opt/bot/
+KillMode=process
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
