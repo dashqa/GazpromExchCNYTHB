@@ -23,6 +23,11 @@ const KeyboardMarkup = {
   withdrawalType: new InlineKeyboard()
     .text(KeyboardLocales.WITHDRAWAL_TYPE_FROM_RUB.toUpperCase(), 'withdrawal_type_from_rub').row()
     .text(KeyboardLocales.WITHDRAWAL_TYPE_FROM_THB.toUpperCase(), 'withdrawal_type_from_thb'),
+  help: new InlineKeyboard()
+    .text(KeyboardLocales.HELP_PAYMENT.toUpperCase(), 'help_payment').row()
+    .text(KeyboardLocales.HELP_WITHDRAWAL.toUpperCase(), 'help_withdrawal')
+    .row()
+    .text(KeyboardLocales.HELP_SETTINGS.toUpperCase(), 'help_settings'),
 };
 
 export { KeyboardMarkup };

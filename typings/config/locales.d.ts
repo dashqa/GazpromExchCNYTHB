@@ -10,6 +10,9 @@ declare const KeyboardLocales: {
     NOT_INCLUDE_ATM_COMMISSION: string;
     WITHDRAWAL_TYPE_FROM_RUB: string;
     WITHDRAWAL_TYPE_FROM_THB: string;
+    HELP_PAYMENT: string;
+    HELP_WITHDRAWAL: string;
+    HELP_SETTINGS: string;
 };
 declare const ConversationLocales: {
     CHOOSE_WITHDRAWAL_TYPE: string;

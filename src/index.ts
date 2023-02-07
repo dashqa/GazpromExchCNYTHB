@@ -9,7 +9,9 @@ import { KeyboardLocales } from './config';
 import { Payment, Withdrawal } from './conversations';
 import { error } from './middlewares/error';
 import startServer from './server';
-import { useStartCommand, useHelpCommand } from './commands';
+import {
+  useStartCommand, useHelpCommand, useHelpPaymentCallback, useHelpWithdrawalCallback, useHelpSettingsCallback,
+} from './commands';
 
 config();
 
@@ -47,6 +49,12 @@ bot.command('start', async (ctx) => {
 bot.command('help', async (ctx) => {
   await useHelpCommand(ctx);
 });
+
+bot.callbackQuery('help_payment', async (ctx: ContextType) => useHelpPaymentCallback(ctx));
+
+bot.callbackQuery('help_withdrawal', async (ctx: ContextType) => useHelpWithdrawalCallback(ctx));
+
+bot.callbackQuery('help_settings', async (ctx: ContextType) => useHelpSettingsCallback(ctx));
 
 bot.on('message:text', async (ctx) => {
   const { text } = ctx.msg;

@@ -12,6 +12,9 @@ const KeyboardLocales = {
   NOT_INCLUDE_ATM_COMMISSION: '❌',
   WITHDRAWAL_TYPE_FROM_RUB: 'У меня RUB на бирже,\n сколько могу снять THB',
   WITHDRAWAL_TYPE_FROM_THB: 'Хочу снять THB,\n узнать курс обмена',
+  HELP_PAYMENT: '💳 Покупка',
+  HELP_WITHDRAWAL: '💰 Снятие',
+  HELP_SETTINGS: '⚙️ Настройки',
 };
 
 const ConversationLocales = {
