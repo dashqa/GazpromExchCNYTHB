@@ -31,16 +31,16 @@ const formatDate = (date: string): string => format(new Date(date), 'd MMMM');
 const getPayloadDates = (): { target: string, prev?: string } => {
   const now = new Date();
   const FORMAT = 'yyyyMMdd';
-  // it's weekend or monday before 16:00
-  if (isWeekend(now) || (isMonday(now) && isBefore(now, new Date().setHours(16, 0, 0)))) {
+  // it's weekend or monday before 15:30
+  if (isWeekend(now) || (isMonday(now) && isBefore(now, new Date().setHours(15, 30, 0)))) {
     return {
       target: format(previousFriday(now), FORMAT),
       prev: null,
     };
   }
 
-  // it's monday after 16:00
-  if (isMonday(now) && isAfter(now, new Date().setHours(16, 0, 0))) {
+  // it's monday after 15:30
+  if (isMonday(now) && isAfter(now, new Date().setHours(15, 30, 0))) {
     return {
       target: format(now, FORMAT),
       prev: format(previousFriday(now), FORMAT),
