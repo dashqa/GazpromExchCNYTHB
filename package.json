@@ -1,6 +1,6 @@
 {
   "name": "GazpromExchCNYTHB",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Telegram bot to monitor the cross rate between the RUB and the THB via the CNY. Only for Gazprombank clients.",
   "main": "index.js",
   "scripts": {

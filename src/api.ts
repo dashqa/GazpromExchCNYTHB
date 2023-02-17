@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getPayloadDates, getPrevDate } from './utils';
+import { getPrevDate } from './utils';
 import {
   UNION_PAY_RATE_URL, FOREX_RATE_URL, BASE_CUR, TRANS_CUR,
 } from './config';
@@ -30,7 +30,8 @@ const instance = axios.create({
 const isFilled = <T extends {}>(v: PromiseSettledResult<T>): v is PromiseFulfilledResult<T> => v.status === 'fulfilled';
 
 const fetchUnionPayRate = async (targetDate: string): Promise<any> => {
-  const response = await instance.get(`${UNION_PAY_RATE_URL}/${targetDate}.json`);
+  const jsonDate = targetDate.replace(/-/g, '');
+  const response = await instance.get(`${UNION_PAY_RATE_URL}/${jsonDate}.json`);
   const { rateData } = response.data?.exchangeRateJson.find(({ baseCur, transCur }) => baseCur === BASE_CUR && transCur === TRANS_CUR);
   const { curDate } = response.data;
   return { rate: rateData, date: curDate };
@@ -42,14 +43,22 @@ const fetchOtherRates = async (params: ForexExchangeRateTypeRequest): Promise<Fo
   return { base, date, rates };
 };
 
-const getUnionPayExchangeRate = async (date: string = ''): Promise<UnionPayExchangeRateType[] | void> => {
-  const { target, prev } = date ? { target: date, prev: getPrevDate(date) } : getPayloadDates();
+const getUnionPayExchangeRate = async (dateString: string): Promise<UnionPayExchangeRateType[] | void> => {
+  const ratesCountNum = 2;
 
-  return Promise.allSettled([
-    fetchUnionPayRate(target),
-    prev && fetchUnionPayRate(prev),
-  ]).then((results) => results.map((result) => (isFilled(result) ? result.value : result.status)))
-    .catch((err) => console.log(err));
+  const recursively = async (formattedDate: string, countNum: number): Promise<UnionPayExchangeRateType[]> => {
+    try {
+      const { rate, date } = await fetchUnionPayRate(formattedDate);
+      if (countNum - 1 === 0) {
+        return [{ rate, date }];
+      }
+      return [{ rate, date }, ...(await recursively(getPrevDate(date), countNum - 1))];
+    } catch (error) {
+      return await recursively(getPrevDate(formattedDate), countNum);
+    }
+  };
+
+  return recursively(dateString, ratesCountNum);
 };
 
 const getOtherExchangeRates = async (): Promise<void | ('rejected' | Promise<ForexExchangeRateTypeResponse>[])[]> => {

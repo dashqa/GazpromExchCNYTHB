@@ -25,6 +25,7 @@ bot.use(session({
       target: 0,
       prev: 0,
     },
+    isWeekday: false,
   }),
 }));
 bot.use(error);

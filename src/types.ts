@@ -9,7 +9,8 @@ export interface SessionType {
   unionPayRate: {
     target: number;
     prev: number;
-  };
+  },
+  isWeekday: boolean,
 }
 
 export type ContextType = SessionFlavor<SessionType> & ConversationFlavor & ParseModeFlavor<Context>;
