@@ -16,11 +16,10 @@ const escapeChars = ((str: string): string => str.replace(/[-/\\^$+><?.()|[\]{}]
 
 const getPercentageOfNumber = ((num: number, percent: number): number => (num / 100) * percent);
 
-const isNumeric = (num: string): boolean => {
-  const str = num.replaceAll(',', '.').replaceAll(' ', '').trim();
-  // eslint-disable-next-line no-restricted-globals
-  return str !== '' && !isNaN(str as unknown as number);
-};
+// eslint-disable-next-line no-restricted-globals
+const isNumeric = (num: string): boolean => num !== '' && !isNaN(num as unknown as number);
+
+const replaceComma = (str: string): string => str && str.replaceAll(',', '.').replaceAll(' ', '').trim();
 
 const isTodayDate = (date: string): boolean => isToday(new Date(date));
 
@@ -76,6 +75,7 @@ const formatTextToEqualBlockWidth = (string: string) => {
 export {
   toFixedNumber,
   escapeChars,
+  replaceComma,
   isNumeric,
   isTodayDate,
   isYesterdayDate,

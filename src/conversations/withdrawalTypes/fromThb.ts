@@ -1,7 +1,7 @@
 import { ContextType, ConversationType, ConversationStageType } from '../../types';
 import { ErrorLocales } from '../../config';
 import {
-  escapeChars, isNumeric, getPercentageOfNumber, toFixedNumber,
+  escapeChars, isNumeric, getPercentageOfNumber, toFixedNumber, replaceComma,
 } from '../../utils';
 import { BANK_PERCENT, ATM_COMISSION, APPROXIMATE_FROZE_PERCENT } from '../../config/contstants';
 
@@ -21,7 +21,7 @@ const useWithdrawalFromThb = async (
     await ctx.replyWithMarkdown(current.message, { reply_markup: current.reply_markup });
 
     const context = await conversation.wait();
-    const message = context?.update?.message?.text as unknown as number;
+    const message = replaceComma(context?.update?.message?.text) as unknown as number;
     if (message) {
       lastUserMessageId = context?.update?.message?.message_id;
     }

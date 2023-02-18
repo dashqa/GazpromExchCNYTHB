@@ -1,6 +1,8 @@
 import { ContextType, ConversationType } from '../types';
 import { PaymentStages, KeyboardMarkup, ErrorLocales } from '../config';
-import { toFixedNumber, escapeChars, isNumeric } from '../utils';
+import {
+  toFixedNumber, escapeChars, isNumeric, replaceComma,
+} from '../utils';
 
 const Payment = async (conversation: ConversationType, ctx: ContextType) => {
   const stages = PaymentStages;
@@ -22,7 +24,7 @@ const Payment = async (conversation: ConversationType, ctx: ContextType) => {
 
     const context = await conversation.wait();
 
-    const message = context?.update?.message?.text as unknown as number;
+    const message = replaceComma(context?.update?.message?.text) as unknown as number;
     if (message) {
       lastUserMessageId = context?.update?.message?.message_id;
     }

@@ -1,5 +1,5 @@
 import {
-  escapeChars, isNumeric, toFixedNumber, getPercentageOfNumber,
+  escapeChars, isNumeric, toFixedNumber, getPercentageOfNumber, replaceComma,
 } from '../../utils';
 import { ContextType, ConversationType, ConversationStageType } from '../../types';
 import { ErrorLocales } from '../../config/locales';
@@ -24,7 +24,7 @@ const useWithdrawalFromRub = async (
     await ctx.replyWithMarkdown(current.message, { reply_markup: current.reply_markup });
 
     const context = await conversation.wait();
-    const message = context?.update?.message?.text as unknown as number;
+    const message = replaceComma(context?.update?.message?.text) as unknown as number;
     if (message) {
       lastUserMessageId = context?.update?.message?.message_id;
     }
