@@ -11,6 +11,7 @@ import {
 
 const useStartCommand = async (ctx: ContextType) => {
   const today = getTodayDate();
+  const now = Date.now();
   const unionPayRaw = await getUnionPayExchangeRate(today);
 
   if (!unionPayRaw) {
@@ -21,7 +22,7 @@ const useStartCommand = async (ctx: ContextType) => {
 
   ctx.session.unionPayRate.target = targetRate.rate;
   ctx.session.unionPayRate.prev = prevRate.rate;
-  ctx.session.isWeekday = isWeekendDate(today);
+  ctx.session.isWeekday = isWeekendDate(now);
 
   ctx.replyWithMarkdown(
     `*Курс обмена THB 🇹🇭 \\-\\> CNY 🇨🇳 \\([UnionPay](https://m\\.unionpayintl\\.com/pre-sg/rate/)\\)*

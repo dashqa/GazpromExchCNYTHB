@@ -28,9 +28,9 @@ const isYesterdayDate = (date: string): boolean => isYesterday(new Date(date));
 
 const formatDate = (date: string): string => format(new Date(date), 'd MMMM');
 
-const isWeekendDate = (date: string): boolean => {
-  const timstamp = new Date(date);
-  return isWeekend(timstamp) || (isMonday(timstamp) && isBefore(timstamp, new Date().setHours(15, 30, 0)));
+const isWeekendDate = (timestamp: number): boolean => {
+  const timstamp = new Date(timestamp);
+  return isWeekend(timstamp) || (isMonday(timstamp) && isBefore(timstamp, new Date(timstamp).setHours(15, 30, 0)));
 };
 
 const getTodayDate = (): string => {
