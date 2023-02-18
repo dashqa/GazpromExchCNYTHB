@@ -5,11 +5,13 @@ declare const isNumeric: (num: string) => boolean;
 declare const isTodayDate: (date: string) => boolean;
 declare const isYesterdayDate: (date: string) => boolean;
 declare const formatDate: (date: string) => string;
-declare const getPayloadDates: () => {
-    target: string;
-    prev?: string;
-};
+declare const isWeekendDate: (timestamp: number) => boolean;
+declare const getTodayDate: () => string;
 declare const getPrevDate: (date: string) => string;
+declare const getHumanizedDateRate: ({ date, rate }: {
+    date: string;
+    rate: number;
+}) => string;
 declare const formatTextToEqualBlockWidth: (string: string) => string;
-export { toFixedNumber, escapeChars, isNumeric, isTodayDate, isYesterdayDate, formatDate, getPercentageOfNumber, getPayloadDates, getPrevDate, formatTextToEqualBlockWidth, };
+export { toFixedNumber, escapeChars, isNumeric, isTodayDate, isYesterdayDate, isWeekendDate, formatDate, getPercentageOfNumber, getTodayDate, getPrevDate, getHumanizedDateRate, formatTextToEqualBlockWidth, };
 //# sourceMappingURL=utils.d.ts.map

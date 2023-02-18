@@ -6,6 +6,7 @@ export interface SessionType {
         target: number;
         prev: number;
     };
+    isWeekday: boolean;
 }
 export type ContextType = SessionFlavor<SessionType> & ConversationFlavor & ParseModeFlavor<Context>;
 export type ConversationType = Conversation<ContextType>;
