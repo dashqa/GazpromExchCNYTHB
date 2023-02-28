@@ -5,8 +5,6 @@ const KeyboardLocales = {
   WITHDRAW: '💰 Снятие',
   SETTINGS: '⚙️ Настройки',
   BACK: 'Назад ↩️',
-  BEFORE_4PM: '✅',
-  AFTER_4PM: '❌',
   MORE_INFO: '⚡️ Больше информации',
   INCLUDE_ATM_COMMISSION: '✅',
   NOT_INCLUDE_ATM_COMMISSION: '❌',

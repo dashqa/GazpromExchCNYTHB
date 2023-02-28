@@ -5,17 +5,6 @@ import {
 import type { ParseModeFlavor } from '@grammyjs/parse-mode';
 import { Context, SessionFlavor } from 'grammy';
 
-export interface SessionType {
-  unionPayRate: {
-    target: number;
-    prev: number;
-  },
-  isWeekday: boolean,
-}
-
-export type ContextType = SessionFlavor<SessionType> & ConversationFlavor & ParseModeFlavor<Context>;
-export type ConversationType = Conversation<ContextType>;
-
 export interface UnionPayExchangeRateType {
   rate: number;
   date: string;
@@ -37,3 +26,14 @@ export interface ConversationStageType {
   message: string;
   reply_markup: any;
 }
+
+export interface SessionType {
+  unionPayRate: {
+    target: UnionPayExchangeRateType;
+    prev: UnionPayExchangeRateType;
+  },
+  hasActualRate: boolean,
+}
+
+export type ContextType = SessionFlavor<SessionType> & ConversationFlavor & ParseModeFlavor<Context>;
+export type ConversationType = Conversation<ContextType>;

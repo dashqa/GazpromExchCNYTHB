@@ -18,11 +18,6 @@ const PaymentStages = [
     message: escapeChars(ConversationLocales.PAYMENT_STAGE[3]),
     reply_markup: KeyboardMarkup.back,
   },
-  {
-    stage: 4,
-    message: escapeChars(ConversationLocales.PAYMENT_STAGE[4]),
-    reply_markup: KeyboardMarkup.isBefore4pm,
-  },
 ];
 
 const WithdrawalStages = {

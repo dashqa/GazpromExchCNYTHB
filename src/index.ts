@@ -22,10 +22,16 @@ const bot = new Bot<ContextType>(BOT_TOKEN || '');
 bot.use(session({
   initial: () => ({
     unionPayRate: {
-      target: 0,
-      prev: 0,
+      target: {
+        date: '',
+        rate: 0,
+      },
+      prev: {
+        date: '',
+        rate: 0,
+      },
     },
-    isWeekday: false,
+    hasActualRate: false,
   }),
 }));
 

@@ -6,12 +6,11 @@ import {
   getHumanizedDateRate,
   getTodayDate,
   escapeChars,
-  isWeekendDate,
+  hasActualRate,
 } from '../utils';
 
 const useStartCommand = async (ctx: ContextType) => {
   const today = getTodayDate();
-  const now = Date.now();
   const unionPayRaw = await getUnionPayExchangeRate(today);
 
   if (!unionPayRaw) {
@@ -20,9 +19,9 @@ const useStartCommand = async (ctx: ContextType) => {
 
   const [targetRate, prevRate] = unionPayRaw;
 
-  ctx.session.unionPayRate.target = targetRate.rate;
-  ctx.session.unionPayRate.prev = prevRate.rate;
-  ctx.session.isWeekday = isWeekendDate(now);
+  ctx.session.unionPayRate.target = targetRate;
+  ctx.session.unionPayRate.prev = prevRate;
+  ctx.session.hasActualRate = hasActualRate(targetRate);
 
   ctx.replyWithMarkdown(
     `*Курс обмена THB 🇹🇭 \\-\\> CNY 🇨🇳 \\([UnionPay](https://m\\.unionpayintl\\.com/pre-sg/rate/)\\)*

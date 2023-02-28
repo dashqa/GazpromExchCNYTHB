@@ -7,6 +7,7 @@ import {
   isYesterday,
 } from 'date-fns';
 import { ru } from 'date-fns/locale';
+import { UnionPayExchangeRateType } from './types';
 
 setDefaultOptions({ locale: ru });
 
@@ -16,10 +17,10 @@ const escapeChars = ((str: string): string => str.replace(/[-/\\^$+><?.()|[\]{}]
 
 const getPercentageOfNumber = ((num: number, percent: number): number => (num / 100) * percent);
 
+const replaceComma = (str: string): string => str && str.replaceAll(',', '.').replaceAll(' ', '').trim();
+
 // eslint-disable-next-line no-restricted-globals
 const isNumeric = (num: string): boolean => num !== '' && !isNaN(num as unknown as number);
-
-const replaceComma = (str: string): string => str && str.replaceAll(',', '.').replaceAll(' ', '').trim();
 
 const isTodayDate = (date: string): boolean => isToday(new Date(date));
 
@@ -27,10 +28,12 @@ const isYesterdayDate = (date: string): boolean => isYesterday(new Date(date));
 
 const formatDate = (date: string): string => format(new Date(date), 'd MMMM');
 
-const isWeekendDate = (timestamp: number): boolean => {
-  const timstamp = new Date(timestamp);
-  return isWeekend(timstamp) || (isMonday(timstamp) && isBefore(timstamp, new Date(timstamp).setHours(15, 30, 0)));
-};
+const isWeekendDate = (timestamp: number): boolean => isWeekend(new Date(timestamp));
+
+// const isMondayBefore4pm = (timestamp: number): boolean => {
+//   const timstamp = new Date(timestamp);
+//   return isMonday(timstamp) && isBefore(timstamp, new Date(timstamp).setHours(15, 30, 0));
+// };
 
 const getTodayDate = (): string => {
   const now = new Date();
@@ -52,6 +55,19 @@ const getHumanizedDateRate = ({ date, rate }: { date: string, rate: number }): s
     return `Вчера - *${rate}*`;
   }
   return `${formatDate(date)} - *${rate}*`;
+};
+
+const hasActualRate = (targetRate: UnionPayExchangeRateType): boolean => {
+  if (!targetRate) {
+    return false;
+  }
+
+  const now = Date.now();
+  if (isWeekendDate(now)) {
+    return true;
+  }
+
+  return targetRate.date === getTodayDate();
 };
 
 const formatTextToEqualBlockWidth = (string: string) => {
@@ -81,6 +97,7 @@ export {
   isYesterdayDate,
   isWeekendDate,
   formatDate,
+  hasActualRate,
   getPercentageOfNumber,
   getTodayDate,
   getPrevDate,

@@ -14,6 +14,7 @@ const useWithdrawalFromRub = async (
   stages: ConversationStageType[],
   chatId: number,
   unionPayTargetRate: number,
+  hasActualRate: boolean,
 ): Promise<void> => {
   let current = stages[0];
   let exchangeRate = 0;
@@ -58,8 +59,8 @@ const useWithdrawalFromRub = async (
         isInludesATMCommission = false;
       }
 
-      const boughtCNY = toFixedNumber(RUB / exchangeRate, 1); // получено на карту от брокера
-      const gotCNY = toFixedNumber(boughtCNY - getPercentageOfNumber(boughtCNY, BROKER_PERCENT), 2);
+      const boughtCNY = toFixedNumber(RUB / exchangeRate, 1); // куплено CNY
+      const gotCNY = toFixedNumber(boughtCNY - getPercentageOfNumber(boughtCNY, BROKER_PERCENT), 2); // получено на карту от брокера
 
       const cashCNY = toFixedNumber(
         gotCNY - getPercentageOfNumber(gotCNY, BANK_PERCENT) - (isInludesATMCommission ? ATM_COMISSION * unionPayTargetRate : 0),
@@ -76,6 +77,7 @@ const useWithdrawalFromRub = async (
       const diffRUB = toFixedNumber(diffCNY * exchangeRate, 2);
 
       const escapedText = escapeChars(`
+      ${!hasActualRate ? '❗️ *Курс на текущий день ещё не установлен, расчёты по курсу предыдущего дня* ❗️\n' : ''}
       \nПоступления на карту от Брокера: *${gotCNY} CNY* 🇨🇳
       \nСнятие в ATM: *${cashCNY} CNY* 🇨🇳 или *${THB} THB* 🇹🇭
       \nКурс снятия *RUB -> THB*: *${FINALRATE}*

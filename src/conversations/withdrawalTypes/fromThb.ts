@@ -3,7 +3,9 @@ import { ErrorLocales } from '../../config';
 import {
   escapeChars, isNumeric, getPercentageOfNumber, toFixedNumber, replaceComma,
 } from '../../utils';
-import { BANK_PERCENT, ATM_COMISSION, APPROXIMATE_FROZE_PERCENT } from '../../config/contstants';
+import {
+  BANK_PERCENT, ATM_COMISSION, APPROXIMATE_FROZE_PERCENT, BROKER_PERCENT,
+} from '../../config/contstants';
 
 const useWithdrawalFromThb = async (
   conversation: ConversationType,
@@ -11,6 +13,7 @@ const useWithdrawalFromThb = async (
   stages: ConversationStageType[],
   chatId: number,
   unionPayTargetRate: number,
+  hasActualRate: boolean,
 ): Promise<void> => {
   let current = stages[0];
   let exchangeRate = 0;
@@ -60,10 +63,13 @@ const useWithdrawalFromThb = async (
 
       const withFee = toFixedNumber(withoutBankFee + getPercentageOfNumber(withoutBankFee, BANK_PERCENT), 2); // с комиссией банка в CNY
 
-      const needRub = toFixedNumber(withFee * exchangeRate, 2); // нужно рублей
-      const FINALRATE = toFixedNumber((withFee * exchangeRate) / needTHB, 4); // финальный курс RUB -> THB
+      const exchangeRateWithBrokerFee = toFixedNumber(Number(exchangeRate) + getPercentageOfNumber(exchangeRate, BROKER_PERCENT), 4);
+
+      const needRub = toFixedNumber(withFee * exchangeRateWithBrokerFee, 2); // нужно рублей
+      const FINALRATE = toFixedNumber((withFee * exchangeRateWithBrokerFee) / needTHB, 4); // финальный курс RUB -> THB
 
       const escapedText = escapeChars(`
+      ${!hasActualRate ? '❗️ *Курс на текущий день ещё не установлен, расчёты по курсу предыдущего дня* ❗️\n' : ''}
       \nИтоговая сумма: *${withFee} CNY* 🇨🇳 или *${needRub} RUB* 🇷🇺
       \nКурс снятия *RUB -> THB*: *${FINALRATE}*
       \nP.S. Нужно учитывать, что банк заморозит CNY 🇨🇳 на *≈${APPROXIMATE_FROZE_PERCENT}%* больше от суммы операции. Если Вам нужно снять *${withFee} CNY* 🇨🇳, то на карте должно быть *≈${toFixedNumber(withFee + getPercentageOfNumber(withFee, APPROXIMATE_FROZE_PERCENT), 2)} CNY* 🇨🇳

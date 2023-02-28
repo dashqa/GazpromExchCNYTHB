@@ -10,10 +10,6 @@ const KeyboardMarkup = {
     .resized(),
   back: new InlineKeyboard()
     .text(KeyboardLocales.BACK, 'keyboard_back'),
-  isBefore4pm: new InlineKeyboard()
-    .text(KeyboardLocales.BEFORE_4PM, 'before_4pm')
-    .text(KeyboardLocales.AFTER_4PM, 'after_4pm').row()
-    .text(KeyboardLocales.BACK, 'keyboard_back'),
   moreInfo: new InlineKeyboard()
     .text(KeyboardLocales.MORE_INFO, 'more_info'),
   includeATMCommission: new InlineKeyboard()
