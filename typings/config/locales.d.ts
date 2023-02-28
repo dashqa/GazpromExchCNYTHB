@@ -3,8 +3,6 @@ declare const KeyboardLocales: {
     WITHDRAW: string;
     SETTINGS: string;
     BACK: string;
-    BEFORE_4PM: string;
-    AFTER_4PM: string;
     MORE_INFO: string;
     INCLUDE_ATM_COMMISSION: string;
     NOT_INCLUDE_ATM_COMMISSION: string;
