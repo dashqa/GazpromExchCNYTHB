@@ -3,12 +3,13 @@ import {
   KeyboardMarkup, WithdrawalStages,
   ConversationLocales,
 } from '../config';
+import { getUser } from '../db';
 import { useWithdrawalFromRub } from './withdrawalTypes/fromRub';
 import { useWithdrawalFromThb } from './withdrawalTypes/fromThb';
 
 const Withdrawal = async (conversation: ConversationType, ctx: ContextType) => {
   const stages = WithdrawalStages;
-  const { hasActualRate, unionPayRate } = ctx.session;
+  const user = await getUser(ctx.from.id);
   const chatId = ctx.chat?.id as number;
 
   await ctx.replyWithMarkdown(ConversationLocales.CHOOSE_WITHDRAWAL_TYPE,
@@ -17,11 +18,11 @@ const Withdrawal = async (conversation: ConversationType, ctx: ContextType) => {
   const { callbackQuery } = await conversation.waitForCallbackQuery(['withdrawal_type_from_rub', 'withdrawal_type_from_thb']);
 
   if (callbackQuery?.data === 'withdrawal_type_from_rub') {
-    await useWithdrawalFromRub(conversation, ctx, stages.FROM_RUB, chatId, unionPayRate.target.rate, hasActualRate);
+    await useWithdrawalFromRub(conversation, ctx, stages.FROM_RUB, chatId, user);
   }
 
   if (callbackQuery?.data === 'withdrawal_type_from_thb') {
-    await useWithdrawalFromThb(conversation, ctx, stages.FROM_THB, chatId, unionPayRate.target.rate, hasActualRate);
+    await useWithdrawalFromThb(conversation, ctx, stages.FROM_THB, chatId, user);
   }
 };
 

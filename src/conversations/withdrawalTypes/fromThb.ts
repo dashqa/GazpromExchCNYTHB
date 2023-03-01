@@ -6,21 +6,31 @@ import {
 import {
   BANK_PERCENT, ATM_COMISSION, APPROXIMATE_FROZE_PERCENT, BROKER_PERCENT,
 } from '../../config/contstants';
+import { IUser } from '../../models/UserSchema';
 
 const useWithdrawalFromThb = async (
   conversation: ConversationType,
   ctx: ContextType,
   stages: ConversationStageType[],
   chatId: number,
-  unionPayTargetRate: number,
-  hasActualRate: boolean,
+  user: IUser,
 ): Promise<void> => {
+  const { settings, unionPayRate } = user;
+  const { rate } = settings.boughtRate || { rate: 0 };
+  const unionPayTargetRate = unionPayRate.target.rate;
+  const { hasActualRate } = user.unionPayRate;
+
   let current = stages[0];
-  let exchangeRate = 0;
+  let exchangeRate = rate;
   let needTHB = 0;
   let lastUserMessageId = 0;
 
   while (stages.some((stage) => stage.stage === current.stage)) {
+    // breaks 2th stage if we have exchange rate in db
+    if (exchangeRate && current.stage === 2) {
+      current = stages[current.stage];
+      continue;
+    }
     await ctx.replyWithMarkdown(current.message, { reply_markup: current.reply_markup });
 
     const context = await conversation.wait();

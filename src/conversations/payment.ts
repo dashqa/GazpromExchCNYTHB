@@ -4,19 +4,28 @@ import {
   toFixedNumber, escapeChars, isNumeric, replaceComma, getPercentageOfNumber,
 } from '../utils';
 import { BROKER_PERCENT } from '../config/contstants';
+import { getUser } from '../db';
 
 const Payment = async (conversation: ConversationType, ctx: ContextType) => {
   const stages = PaymentStages;
   const chatId = ctx.chat?.id as number;
-  const { unionPayRate, hasActualRate } = ctx.session;
+  const user = await getUser(ctx.from.id);
+  const { settings, unionPayRate } = user;
+  const { rate } = settings.boughtRate || { rate: 0 };
 
   let current = stages[0];
-  let exchangeRate = 0;
+  let exchangeRate = rate;
   let THB = 0;
   let CNY = 0;
   let lastUserMessageId = 0;
 
   while (stages.some((stage) => stage.stage === current?.stage)) {
+    // breaks 2th stage if we have exchange rate in db
+    if (exchangeRate && current.stage === 2) {
+      current = stages[current.stage];
+      continue;
+    }
+
     await ctx.replyWithMarkdown(current.message, { reply_markup: current.reply_markup });
 
     const context = await conversation.wait();
@@ -26,13 +35,14 @@ const Payment = async (conversation: ConversationType, ctx: ContextType) => {
       lastUserMessageId = context?.update?.message?.message_id;
     }
 
+    // not a number
     if (message && !isNumeric(message as unknown as string) && !context?.update?.callback_query?.data) {
       context.deleteMessage();
       await ctx.replyWithMarkdown(escapeChars(ErrorLocales.NOT_NUMBER));
       continue;
     }
 
-    // complaint back btn
+    // complaint back button
     if (/back/.test(context?.update?.callback_query?.data)) {
       ctx.api.deleteMessage(chatId, lastUserMessageId);
       context.deleteMessage();
@@ -57,7 +67,7 @@ const Payment = async (conversation: ConversationType, ctx: ContextType) => {
   const exchangeRateWithBrokerFee = toFixedNumber(Number(exchangeRate) + getPercentageOfNumber(exchangeRate, BROKER_PERCENT), 4);
 
   const escapedText = escapeChars(`
-      ${!hasActualRate ? '❗️ *Курс на текущий день ещё не установлен, расчёты по курсу предыдущего дня* ❗️\n' : ''}
+      ${!unionPayRate.hasActualRate ? '❗️ *Курс на текущий день ещё не установлен, расчёты по курсу предыдущего дня* ❗️\n' : ''}
       \nИтоговая сумма покупки: *${resultSum} CNY* 🇨🇳 или *${toFixedNumber(resultSum * exchangeRateWithBrokerFee, 2)} RUB* 🇷🇺
       \nКурс обмена *RUB -> THB*: *${toFixedNumber((resultSum * exchangeRateWithBrokerFee) / THB, 4)}*
       \nНа карту вернут: *${toFixedNumber(CNY - resultSum, 2)} CNY* 🇨🇳 или *${toFixedNumber((CNY - resultSum) * exchangeRateWithBrokerFee, 2)} RUB* 🇷🇺`);

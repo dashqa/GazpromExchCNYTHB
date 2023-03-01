@@ -24,6 +24,13 @@ const KeyboardMarkup = {
     .text(KeyboardLocales.HELP_WITHDRAWAL.toUpperCase(), 'help_withdrawal')
     .row()
     .text(KeyboardLocales.HELP_SETTINGS.toUpperCase(), 'help_settings'),
+  settings: new Keyboard()
+    .text(KeyboardLocales.SETTINGS_UPDATE_RATE)
+    .text(KeyboardLocales.SETTINGS_DELETE_RATE)
+    .row()
+    .text(KeyboardLocales.SETTINGS_BACK_TO_MAIN)
+    .oneTime()
+    .resized(),
 };
 
 export { KeyboardMarkup };

@@ -1,10 +1,9 @@
 import {
-  format, previousFriday, isWeekend, subDays, isToday,
+  format, isWeekend, subDays, isToday,
   setDefaultOptions,
-  isMonday,
-  isBefore,
-  isAfter,
   isYesterday,
+  isAfter,
+  addMinutes,
 } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { UnionPayExchangeRateType } from './types';
@@ -26,13 +25,19 @@ const isTodayDate = (date: string): boolean => isToday(new Date(date));
 
 const isYesterdayDate = (date: string): boolean => isYesterday(new Date(date));
 
-const formatDate = (date: string): string => format(new Date(date), 'd MMMM');
+const isOutdated = (timestamp: number): boolean => {
+  const now = Date.now();
+  const past = new Date(timestamp);
+  return isAfter(now, addMinutes(past, 60));
+};
+
+const formatDate = (date: string | Date, formatT: string): string => format(new Date(date), formatT);
 
 const isWeekendDate = (timestamp: number): boolean => isWeekend(new Date(timestamp));
 
 // const isMondayBefore4pm = (timestamp: number): boolean => {
 //   const timstamp = new Date(timestamp);
-//   return isMonday(timstamp) && isBefore(timstamp, new Date(timstamp).setHours(15, 30, 0));
+//   return isMonday(timstamp) && isBefore(timstamp, new Date(timstamp).setHours(16, 00, 0));
 // };
 
 const getTodayDate = (): string => {
@@ -54,7 +59,7 @@ const getHumanizedDateRate = ({ date, rate }: { date: string, rate: number }): s
   if (isYesterdayDate(date)) {
     return `Вчера - *${rate}*`;
   }
-  return `${formatDate(date)} - *${rate}*`;
+  return `${formatDate(date, 'd MMMM')} - *${rate}*`;
 };
 
 const hasActualRate = (targetRate: UnionPayExchangeRateType): boolean => {
@@ -95,6 +100,7 @@ export {
   isNumeric,
   isTodayDate,
   isYesterdayDate,
+  isOutdated,
   isWeekendDate,
   formatDate,
   hasActualRate,
