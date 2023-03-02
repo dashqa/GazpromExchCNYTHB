@@ -22,7 +22,13 @@ import {
 
 config();
 
-const { BOT_TOKEN, PORT } = process.env;
+const {
+  BOT_TOKEN,
+  PORT,
+  MONGO_HOST,
+  MONGO_PORT,
+  MONGO_DB_NAME,
+} = process.env;
 
 const bot = new Bot<ContextType>(BOT_TOKEN || '');
 
@@ -101,8 +107,12 @@ async function startup() {
   });
 }
 
-// startServer(PORT || '5000');
-// startup();
+connectDB(MONGO_HOST, MONGO_PORT, MONGO_DB_NAME)
+  .then(() => {
+    startServer(PORT || '5000');
+    startup();
+  })
+  .catch((err) => console.log(err));
 
 process.once('SIGINT', () => {
   closeConnection()
@@ -114,10 +124,3 @@ process.once('SIGTERM', () => {
     .then(() => console.log('SIGTERM occurred, exiting'))
     .catch(() => console.log('SIGTERM occurred, exiting with no db connection closed'));
 });
-
-connectDB()
-  .then(() => {
-    startServer(PORT || '5000');
-    startup();
-  })
-  .catch((err) => console.log(err));

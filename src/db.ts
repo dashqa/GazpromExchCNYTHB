@@ -1,9 +1,9 @@
 import { connect, connection } from 'mongoose';
 import { User, IUser } from './models/UserSchema';
 
-const url: string = `mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DB_NAME}`;
+const connectDB = async (MONGO_HOST: string, MONGO_PORT: string, MONGO_DB_NAME: string): Promise<void> => {
+  const url: string = `mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB_NAME}`;
 
-const connectDB = async (): Promise<void> => {
   try {
     await connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
   } catch (err) {
