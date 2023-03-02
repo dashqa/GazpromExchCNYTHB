@@ -31,6 +31,7 @@ const useStartCommand = async (ctx: ContextType) => {
       id: ctx.from.id,
       chat_id: ctx.chat.id,
       username: ctx.from.username,
+      name: `${ctx.from.first_name} ${ctx.from.last_name}`,
       settings: {
         boughtRate: {
           rate: 0,

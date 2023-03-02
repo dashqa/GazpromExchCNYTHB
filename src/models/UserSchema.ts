@@ -22,6 +22,7 @@ interface IUser {
   settings?: ISettings;
   chat_id?: number;
   username?: string;
+  name?: string;
   unionPayRate?: IUnionPayRate;
 }
 
@@ -29,6 +30,7 @@ const userSchema = new Schema<IUser>({
   id: { type: Number, required: true },
   chat_id: { type: Number, required: false },
   username: { type: String, required: false },
+  name: { type: String, required: false },
   settings: {
     boughtRate: {
       rate: { type: Number, required: false },

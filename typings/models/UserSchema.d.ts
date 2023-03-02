@@ -18,6 +18,7 @@ interface IUser {
     settings?: ISettings;
     chat_id?: number;
     username?: string;
+    name?: string;
     unionPayRate?: IUnionPayRate;
 }
 declare const User: import("mongoose").Model<IUser, {}, {}>;
