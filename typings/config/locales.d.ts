@@ -11,6 +11,9 @@ declare const KeyboardLocales: {
     HELP_PAYMENT: string;
     HELP_WITHDRAWAL: string;
     HELP_SETTINGS: string;
+    SETTINGS_UPDATE_RATE: string;
+    SETTINGS_DELETE_RATE: string;
+    SETTINGS_BACK_TO_MAIN: string;
 };
 declare const ConversationLocales: {
     CHOOSE_WITHDRAWAL_TYPE: string;

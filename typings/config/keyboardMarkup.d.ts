@@ -6,6 +6,7 @@ declare const KeyboardMarkup: {
     includeATMCommission: InlineKeyboard;
     withdrawalType: InlineKeyboard;
     help: InlineKeyboard;
+    settings: Keyboard;
 };
 export { KeyboardMarkup };
 //# sourceMappingURL=keyboardMarkup.d.ts.map
