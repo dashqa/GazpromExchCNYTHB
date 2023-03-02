@@ -54,8 +54,6 @@ const useStartCommand = async (ctx: ContextType) => {
 
   const isOutdatedUnionPayRate = !user?.unionPayRate.target.rate || isOutdated(user?.unionPayRate.lastModified);
 
-  console.log('isOutdatedUnionPayRate', isOutdatedUnionPayRate);
-
   const callback = (targetUnion: IRate, prevUnion: IRate, boughtRate: IRate) => {
     const RUBTHB = getRUBTHB(boughtRate?.rate, targetUnion.rate) || 0;
 
