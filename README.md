@@ -1,4 +1,4 @@
 <h2>GazpromExchCNYTHB</h2>
 <p>
-    Telegram bot to monitor the cross rate between the RUB and the THB via the CNY. Only for Gazprombank clients.
+    Telegram bot to monitor the cross rate between RUB and THB via CNY. Only for clients of Gazprombank and Broker Bank GPB (Joint Stock Company).
 </p>
